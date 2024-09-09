@@ -1,78 +1,82 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertisseur Unicode</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1, h3 {
-            color: #bb86fc;
-        }
-        textarea {
-            width: 100%;
-            max-width: 600px;
-            height: 100px;
-            margin-bottom: 20px;
-            background-color: #1f1f1f;
-            color: #ffffff;
-            border: 1px solid #bb86fc;
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #3700b3;
-            color: #ffffff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #6200ee;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convertisseur Unicode</title>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#121212;color:#e0e0e0;display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden}
+#particles-js{position:absolute;width:100%;height:100%;top:0;left:0;z-index:-1}
+.container{background-color:#1e1e1e;padding:20px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.5);max-width:400px;width:100%;text-align:center;opacity:0;transition:opacity 0.5s ease}
+.container.show{opacity:1}
+h1,h3{color:#bb86fc;margin-bottom:10px;transition:text-shadow 0.3s ease}
+h1:hover,h3:hover{text-shadow:0 0 10px #bb86fc,0 0 20px #bb86fc}
+input,textarea{width:100%;background-color:#1f1f1f;color:#fff;border:1px solid #bb86fc;padding:10px;font-size:16px;border-radius:8px;transition:box-shadow 0.3s ease,border-color 0.3s ease}
+input:focus,textarea:focus{box-shadow:0 0 15px #bb86fc,0 0 30px #bb86fc;outline:none;border-color:#bb86fc}
+textarea{height:100px;margin-bottom:20px;resize:none}
+button{padding:12px 24px;background-color:#3700b3;color:#fff;border:none;cursor:pointer;border-radius:8px;margin-top:10px;font-size:16px;transition:transform 0.2s ease,background-color 0.3s ease,box-shadow 0.3s ease}
+button:hover{background-color:#6200ee;transform:translateY(-2px);box-shadow:0 0 15px #bb86fc,0 0 30px #bb86fc}
+button:active{transform:translateY(0)}
+.hidden{display:none}
+
+/* Ajout de la marge entre les champs */
+#password { margin-top: 15px; }
+</style>
 </head>
 <body>
-    <h1>Convertisseur Unicode</h1>
-
-    <h3>Texte à convertir en entités Unicode :</h3>
-    <textarea id="inputText" placeholder="Saisis ton texte ici..."></textarea>
-
-    <h3>Résultat (Unicode) :</h3>
-    <textarea id="outputText" placeholder="Le texte converti apparaîtra ici..."></textarea>
-
-    <button onclick="textToUnicode()">Texte vers Unicode</button>
-    <br>
-
-    <button onclick="unicodeToText()">Unicode vers Texte</button>
-
-    <script>
-        function textToUnicode() {
-            let input = document.getElementById('inputText').value;
-            let output = '';
-            for (let i = 0; i < input.length; i++) {
-                output += '&#' + input.charCodeAt(i) + ';';
-            }
-            document.getElementById('outputText').value = output;
-        }
-
-        function unicodeToText() {
-            let input = document.getElementById('outputText').value;
-            let output = input.replace(/&#(\d+);/g, function(match, dec) {
-                return String.fromCharCode(dec);
-            });
-            document.getElementById('inputText').value = output;
-        }
-    </script>
+<div id="particles-js"></div>
+<div id="loginPage" class="container show">
+<h1>Connexion</h1>
+<input type="text" id="username" placeholder="Nom d'utilisateur"><br>
+<input type="password" id="password" placeholder="Mot de passe">
+<button onclick="login()">Se connecter</button>
+<p id="errorMessage" style="color:red;display:none;">Nom d'utilisateur ou mot de passe incorrect</p>
+</div>
+<div id="mainPage" class="container hidden">
+<h1>Convertisseur Unicode</h1>
+<h3>Texte à convertir en entités Unicode :</h3>
+<textarea id="inputText" placeholder="Saisis ton texte ici..."></textarea>
+<h3>Résultat (Unicode) :</h3>
+<textarea id="outputText" placeholder="Le texte converti apparaîtra ici..."></textarea>
+<div class="button-container">
+<button onclick="textToUnicode()">Texte vers Unicode</button>
+<button onclick="unicodeToText()">Unicode vers Texte</button>
+</div>
+</div>
+<script>
+function login(){
+const username=document.getElementById('username').value;
+const password=document.getElementById('password').value;
+if(username==='shadowstrike'&&password==='shadowstrike'){
+document.getElementById('loginPage').classList.add('hidden');
+const mainPage=document.getElementById('mainPage');
+mainPage.classList.remove('hidden');
+setTimeout(()=>mainPage.classList.add('show'),50)
+}else{
+document.getElementById('errorMessage').style.display='block'
+}}
+function textToUnicode(){
+let input=document.getElementById('inputText').value;
+let output='';
+for(let i=0;i<input.length;i++){
+output+='&#'+input.charCodeAt(i)+';'
+}
+document.getElementById('outputText').value=output
+}
+function unicodeToText(){
+let input=document.getElementById('outputText').value;
+let output=input.replace(/&#(\d+);/g,function(match,dec){
+return String.fromCharCode(dec)
+});
+document.getElementById('inputText').value=output
+}
+particlesJS("particles-js",{
+"particles":{"number":{"value":80,"density":{"enable":true,"value_area":800}},"color":{"value":"#bb86fc"},"shape":{"type":"circle","stroke":{"width":0}},"opacity":{"value":0.3,"random":true,"anim":{"enable":true,"speed":1}},"size":{"value":3,"random":true,"anim":{"enable":true,"speed":5}},"line_linked":{"enable":true,"distance":150,"color":"#bb86fc","opacity":0.4,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"out_mode":"out","bounce":false}},
+"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"grab"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":200,"line_linked":{"opacity":0.7}},"bubble":{"distance":250,"size":4,"duration":2,"opacity":0.8},"repulse":{"distance":100},"push":{"particles_nb":4}}},
+"retina_detect":true
+});
+</script>
 </body>
 </html>
